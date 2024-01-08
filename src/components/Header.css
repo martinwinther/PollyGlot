@@ -1,0 +1,24 @@
+.header {
+	display: flex;
+	align-items: center;
+	background-color: #1e2a47; /* Dark blue background */
+	padding: 10px 20px;
+	color: white;
+}
+
+.header-logo {
+	height: 50px; /* Adjust size as needed */
+	margin-right: 15px;
+}
+
+.header-title {
+	font-size: 24px;
+	margin: 0;
+	font-weight: bold;
+}
+
+.header-tagline {
+	margin: 0;
+	font-size: 14px;
+	opacity: 0.75;
+}
