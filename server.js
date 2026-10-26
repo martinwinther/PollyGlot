@@ -65,7 +65,9 @@ app.post("/api/translate", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3001;
+// API_PORT, not PORT: tooling often sets PORT for the front end, and the two
+// servers must not land on the same port. Keep this in sync with vite.config.js.
+const PORT = process.env.API_PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`API server running at http://localhost:${PORT}`);
 });
