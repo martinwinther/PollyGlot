@@ -1,24 +1,31 @@
 .header {
 	display: flex;
 	align-items: center;
-	background-color: #1e2a47; /* Dark blue background */
-	padding: 10px 20px;
-	color: white;
+	justify-content: center;
+	gap: 12px;
+	padding: 20px 16px;
+	background-color: var(--navy);
+	background-image: url("../assets/worldmap.png");
+	background-size: cover;
+	background-position: center;
+	color: #fff;
 }
 
 .header-logo {
-	height: 50px; /* Adjust size as needed */
-	margin-right: 15px;
+	height: 56px;
+	width: auto;
 }
 
 .header-title {
-	font-size: 24px;
-	margin: 0;
-	font-weight: bold;
+	font-size: 28px;
+	font-weight: 700;
+	line-height: 1;
+	color: var(--green);
 }
 
 .header-tagline {
-	margin: 0;
-	font-size: 14px;
-	opacity: 0.75;
+	margin: 2px 0 0;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
 }

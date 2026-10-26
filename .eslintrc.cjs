@@ -16,5 +16,14 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    // No prop-types in this project; props are documented by the components themselves
+    'react/prop-types': 'off',
   },
+  overrides: [
+    {
+      // Server and build files run in Node, not the browser
+      files: ['server.js', 'utils.js', 'vite.config.js'],
+      env: { node: true, browser: false },
+    },
+  ],
 }

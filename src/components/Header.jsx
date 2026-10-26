@@ -1,12 +1,14 @@
-import React from "react";
-import logo from "../assets/parrot.png";
+import parrot from "../assets/parrot.png";
 import "./Header.css";
+
 function Header() {
 	return (
 		<header className="header">
-			<img src={logo} alt="PollyGlot Logo" className="header-logo" />
-			<h1 className="header-title">PollyGlot</h1>
-			<p className="header-tagline">Perfect Translation Every Time</p>
+			<img src={parrot} alt="" className="header-logo" />
+			<div className="header-text">
+				<h1 className="header-title">PollyGlot</h1>
+				<p className="header-tagline">Perfect Translation Every Time</p>
+			</div>
 		</header>
 	);
 }
