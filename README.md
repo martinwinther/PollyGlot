@@ -41,17 +41,20 @@ Vite proxies `/api/*` through to Express, so the browser only ever talks to one 
 
 ## Stretch goals
 
-Not built yet. Goals 1–7 come from the third mockup in the design file, which
-replaces the two-screen flow with a chat interface; 8 is independent of it.
+Goals 1–7 come from the third mockup in the design file, which replaces the
+two-screen flow with a chat interface; 8 is independent of it.
 
-1. **Conversation layout** — one scrolling column of message bubbles instead of
-   the form/result split.
+1. ~~**Conversation layout**~~ — **done.** One scrolling column of message
+   bubbles replaces the form/result split. The column caps at 260px and scrolls,
+   pinned to the newest bubble. Building it necessarily covered 3 and 4 below,
+   since a column of bubbles cannot exist without the bubbles.
 2. **Opening instruction bubble** (blue) explaining how to use it.
-3. **User message bubble** (green) holding the original text.
-4. **Translation bubble** (dark navy) holding the reply.
-5. **Persistent history** — exchanges stack up instead of one at a time. This is
-   the bulk of the work: `translation` becomes a `messages` array, with keys and
-   auto-scroll to the newest.
+3. ~~**User message bubble**~~ — **done.** Green, holding the original text.
+4. ~~**Translation bubble**~~ — **done.** Dark navy, holding the reply.
+5. **Persistent history** — exchanges stack up instead of one at a time. Partly
+   groundwork-complete: state is already a `messages` array with stable keys and
+   the auto-scroll is in place, so this is now a matter of appending to that
+   array rather than replacing it, plus deciding how far back to keep.
 6. **Inline send field** with the send arrow inside the input, replacing the
    full-width Translate button.
 7. **Flag-only language buttons** along the bottom, replacing the labelled radio
@@ -70,3 +73,6 @@ replaces the two-screen flow with a chat interface; 8 is independent of it.
 - The font is Poppins by assumption; the Figma file may specify another.
 - The result boxes grow with their content rather than staying a fixed height,
   so a long translation cannot overflow.
+- Screen 2 of the main-requirement design (the separate "Original text / Your
+  translation" view) no longer exists — stretch goal 1 replaced it by design.
+  It is recoverable from commit `6fe2573` if the two-screen flow is ever needed.

@@ -11,7 +11,7 @@ function TranslationForm({
 	onSubmit,
 }) {
 	return (
-		<form className="translator-card" onSubmit={onSubmit}>
+		<form className="translator-form" onSubmit={onSubmit}>
 			<label className="field-label" htmlFor="text-to-translate">
 				Text to translate <span aria-hidden="true">👇</span>
 			</label>

@@ -1,14 +1,14 @@
 import { useState } from "react";
 import Header from "./components/Header";
+import Conversation from "./components/Conversation";
 import TranslationForm from "./components/TranslationForm";
-import TranslationResult from "./components/TranslationResult";
 import { DEFAULT_LANGUAGE } from "./constants";
 import "./App.css";
 
 function App() {
 	const [text, setText] = useState("");
 	const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
-	const [translation, setTranslation] = useState("");
+	const [messages, setMessages] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 
@@ -37,8 +37,11 @@ function App() {
 				throw new Error(data.message);
 			}
 
-			// Switching to the result view is driven by this state
-			setTranslation(data.translation);
+			// One exchange: what you asked for, then what came back
+			setMessages([
+				{ id: crypto.randomUUID(), role: "user", text: textToTranslate },
+				{ id: crypto.randomUUID(), role: "translation", text: data.translation },
+			]);
 		} catch (err) {
 			// Log the error for debugging
 			console.error(err);
@@ -55,21 +58,18 @@ function App() {
 	function handleStartOver() {
 		setText("");
 		setLanguage(DEFAULT_LANGUAGE);
-		setTranslation("");
+		setMessages([]);
 		setError("");
 	}
+
+	const hasConversation = messages.length > 0;
 
 	return (
 		<div className="app">
 			<Header />
 			<main className="app-body">
-				{translation ? (
-					<TranslationResult
-						originalText={text}
-						translation={translation}
-						onStartOver={handleStartOver}
-					/>
-				) : (
+				<div className="translator-card">
+					{hasConversation && <Conversation messages={messages} />}
 					<TranslationForm
 						text={text}
 						language={language}
@@ -79,7 +79,16 @@ function App() {
 						onLanguageChange={setLanguage}
 						onSubmit={handleTranslate}
 					/>
-				)}
+					{hasConversation && (
+						<button
+							type="button"
+							className="secondary-button"
+							onClick={handleStartOver}
+						>
+							Start Over
+						</button>
+					)}
+				</div>
 			</main>
 		</div>
 	);

@@ -1,0 +1,32 @@
+.conversation {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	max-height: 260px;
+	margin-bottom: 20px;
+	padding-right: 4px;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+.bubble {
+	margin: 0;
+	padding: 12px 14px;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.4;
+	/* Translations arrive with their own line breaks; keep them */
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.bubble--user {
+	background-color: var(--green-bubble);
+	color: var(--navy);
+}
+
+.bubble--translation {
+	background-color: var(--blue-bubble);
+	color: #fff;
+}

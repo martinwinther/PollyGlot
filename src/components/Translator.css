@@ -6,6 +6,11 @@
 	border-radius: 8px;
 }
 
+.translator-form {
+	display: flex;
+	flex-direction: column;
+}
+
 .field-label {
 	margin: 0 0 8px;
 	padding: 0;
@@ -106,4 +111,23 @@
 .primary-button:disabled {
 	opacity: 0.7;
 	cursor: not-allowed;
+}
+
+.secondary-button {
+	margin-top: 10px;
+	padding: 10px 20px;
+	border: 2px solid var(--blue);
+	border-radius: 4px;
+	background-color: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--blue);
+	cursor: pointer;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+.secondary-button:hover {
+	background-color: var(--blue);
+	color: #fff;
 }
