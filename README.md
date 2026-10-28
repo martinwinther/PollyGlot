@@ -48,7 +48,10 @@ two-screen flow with a chat interface; 8 is independent of it.
    bubbles replaces the form/result split. The column caps at 260px and scrolls,
    pinned to the newest bubble. Building it necessarily covered 3 and 4 below,
    since a column of bubbles cannot exist without the bubbles.
-2. **Opening instruction bubble** (blue) explaining how to use it.
+2. ~~**Opening instruction bubble**~~ — **done.** Blue, sits above the exchange
+   and survives Start Over, as `INTRO_MESSAGE` in `src/constants.js`. Its
+   wording says "hit Translate" rather than the mockup's "hit send", because
+   there is no send button until goal 6.
 3. ~~**User message bubble**~~ — **done.** Green, holding the original text.
 4. ~~**Translation bubble**~~ — **done.** Dark navy, holding the reply.
 5. **Persistent history** — exchanges stack up instead of one at a time. Partly

@@ -21,6 +21,11 @@
 	overflow-wrap: anywhere;
 }
 
+.bubble--intro {
+	background-color: var(--blue-intro);
+	color: #fff;
+}
+
 .bubble--user {
 	background-color: var(--green-bubble);
 	color: var(--navy);

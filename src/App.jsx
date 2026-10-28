@@ -2,13 +2,13 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Conversation from "./components/Conversation";
 import TranslationForm from "./components/TranslationForm";
-import { DEFAULT_LANGUAGE } from "./constants";
+import { DEFAULT_LANGUAGE, INTRO_MESSAGE } from "./constants";
 import "./App.css";
 
 function App() {
 	const [text, setText] = useState("");
 	const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
-	const [messages, setMessages] = useState([]);
+	const [messages, setMessages] = useState([INTRO_MESSAGE]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 
@@ -37,8 +37,9 @@ function App() {
 				throw new Error(data.message);
 			}
 
-			// One exchange: what you asked for, then what came back
+			// One exchange, below the intro: what you asked for, then what came back
 			setMessages([
+				INTRO_MESSAGE,
 				{ id: crypto.randomUUID(), role: "user", text: textToTranslate },
 				{ id: crypto.randomUUID(), role: "translation", text: data.translation },
 			]);
@@ -58,18 +59,19 @@ function App() {
 	function handleStartOver() {
 		setText("");
 		setLanguage(DEFAULT_LANGUAGE);
-		setMessages([]);
+		setMessages([INTRO_MESSAGE]);
 		setError("");
 	}
 
-	const hasConversation = messages.length > 0;
+	// The intro bubble is always present, so anything beyond it is a translation
+	const hasTranslation = messages.length > 1;
 
 	return (
 		<div className="app">
 			<Header />
 			<main className="app-body">
 				<div className="translator-card">
-					{hasConversation && <Conversation messages={messages} />}
+					<Conversation messages={messages} />
 					<TranslationForm
 						text={text}
 						language={language}
@@ -79,7 +81,7 @@ function App() {
 						onLanguageChange={setLanguage}
 						onSubmit={handleTranslate}
 					/>
-					{hasConversation && (
+					{hasTranslation && (
 						<button
 							type="button"
 							className="secondary-button"

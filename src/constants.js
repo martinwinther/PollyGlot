@@ -9,3 +9,11 @@ export const LANGUAGES = [
 ];
 
 export const DEFAULT_LANGUAGE = LANGUAGES[0].name;
+
+// Greets you in the conversation column before anything has been translated,
+// and stays put as the first bubble afterwards.
+export const INTRO_MESSAGE = {
+	id: "intro",
+	role: "intro",
+	text: "Select the language you want me to translate into, type your text and hit Translate!",
+};
