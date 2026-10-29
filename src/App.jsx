@@ -37,12 +37,15 @@ function App() {
 				throw new Error(data.message);
 			}
 
-			// One exchange, below the intro: what you asked for, then what came back
-			setMessages([
-				INTRO_MESSAGE,
+			// Append, so earlier exchanges stay above the new one
+			setMessages((previous) => [
+				...previous,
 				{ id: crypto.randomUUID(), role: "user", text: textToTranslate },
 				{ id: crypto.randomUUID(), role: "translation", text: data.translation },
 			]);
+
+			// The text now lives in the conversation, so empty the box for the next one
+			setText("");
 		} catch (err) {
 			// Log the error for debugging
 			console.error(err);
