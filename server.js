@@ -53,8 +53,19 @@ app.post("/api/translate", async (req, res) => {
       max_tokens: 1000,
     });
 
-    // Extract content and send back as JSON
-    const translation = response.choices[0].message.content.trim();
+    // content can come back null: some models answer with an empty message, and
+    // AI_MODEL=openrouter/free routes to whichever free model is available
+    const translation = response.choices?.[0]?.message?.content?.trim();
+
+    if (!translation) {
+      console.error(
+        "Empty completion:",
+        JSON.stringify(response.choices?.[0] ?? response).slice(0, 400)
+      );
+      return res.status(502).json({
+        message: "The translator came back empty. Please try again.",
+      });
+    }
 
     res.json({ translation });
   } catch (e) {
