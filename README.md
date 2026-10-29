@@ -41,8 +41,9 @@ Vite proxies `/api/*` through to Express, so the browser only ever talks to one 
 
 ## Stretch goals
 
-Goals 1–7 come from the third mockup in the design file, which replaces the
-two-screen flow with a chat interface; 8 is independent of it.
+All eight are built. Goals 1–7 come from the third mockup in the design file,
+which replaces the two-screen flow with a chat interface; 8 is independent of
+it.
 
 1. ~~**Conversation layout**~~ — **done.** One scrolling column of message
    bubbles replaces the form/result split. The column caps at 260px and scrolls,
@@ -66,11 +67,12 @@ two-screen flow with a chat interface; 8 is independent of it.
    bottom; the selected one carries a navy border. The radio list and both
    field labels are gone, as the mockup shows. The Start Over button went too,
    then came back as a restart icon at the right of the same row.
-8. **Stream the translation in** as it is generated, rather than waiting for the
-   whole completion. Needs `stream: true` on the request, the chunks relayed to
-   the browser (server-sent events or a streaming response body), and the text
-   appended to the translation box as it arrives. Worth doing after the chat
-   bubbles exist, since that is where the streaming text would land.
+8. ~~**Stream the translation in**~~ — **done.** The server sends
+   `stream: true` and relays each chunk as a line of newline-delimited JSON;
+   the browser reads the body with a stream reader and grows one bubble as the
+   chunks land. How much of this you actually see depends on the model: a slow
+   one types itself out, a fast one can deliver the whole translation inside a
+   single frame.
 
 ## Known deviations from the design
 
@@ -91,3 +93,7 @@ two-screen flow with a chat interface; 8 is independent of it.
   part of the conversation.
 - The message field is a textarea styled to look like the mockup's single-line
   input, so multi-line text still works where a plain input would have lost it.
+- `/api/translate` answers with newline-delimited JSON rather than one JSON
+  object, since it streams. A failure before the stream opens is still a status
+  code and a JSON body; once chunks are flowing, an error travels as an
+  `{"error"}` line instead, because the status has already been sent.

@@ -37,8 +37,8 @@ app.post("/api/translate", async (req, res) => {
   }
 
   try {
-    // Send chat completions request
-    const response = await openai.chat.completions.create({
+    // Stream the completion so the translation can appear as it is written
+    const stream = await openai.chat.completions.create({
       model: process.env.AI_MODEL,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
@@ -51,33 +51,53 @@ app.post("/api/translate", async (req, res) => {
       temperature: 0.3,
       // Translations stay close to the input length, so cap the response
       max_tokens: 1000,
+      stream: true,
     });
 
-    // content can come back null: some models answer with an empty message, and
-    // AI_MODEL=openrouter/free routes to whichever free model is available
-    const translation = response.choices?.[0]?.message?.content?.trim();
+    // Newline-delimited JSON: one {"delta"} per chunk, or one {"error"}.
+    // The status is already sent by now, so a failure mid-stream has to
+    // travel in the body rather than as a status code.
+    res.setHeader("Content-Type", "application/x-ndjson");
+    res.setHeader("Cache-Control", "no-cache");
 
-    if (!translation) {
-      console.error(
-        "Empty completion:",
-        JSON.stringify(response.choices?.[0] ?? response).slice(0, 400)
-      );
-      return res.status(502).json({
-        message: "The translator came back empty. Please try again.",
-      });
+    let streamed = "";
+
+    for await (const chunk of stream) {
+      const delta = chunk.choices?.[0]?.delta?.content;
+      if (!delta) continue;
+
+      streamed += delta;
+      res.write(`${JSON.stringify({ delta })}\n`);
     }
 
-    res.json({ translation });
+    // Some models answer with nothing at all; say so rather than ending
+    // the stream on silence and leaving an empty bubble behind
+    if (!streamed.trim()) {
+      console.error("Empty completion for language:", language);
+      res.write(
+        `${JSON.stringify({
+          error: "The translator came back empty. Please try again.",
+        })}\n`
+      );
+    }
+
+    res.end();
   } catch (e) {
     console.error(e);
-    res.status(500).json({
-      message: "It's not you, it's us. Something went wrong on the server.",
-    });
+
+    const message = "It's not you, it's us. Something went wrong on the server.";
+
+    // Once the first chunk is out the status is fixed, so the error has to
+    // go down the open stream instead
+    if (res.headersSent) {
+      res.write(`${JSON.stringify({ error: message })}\n`);
+      res.end();
+    } else {
+      res.status(500).json({ message });
+    }
   }
 });
 
-// API_PORT, not PORT: tooling often sets PORT for the front end, and the two
-// servers must not land on the same port. Keep this in sync with vite.config.js.
 const PORT = process.env.API_PORT || 3001;
 app.listen(PORT, () => {
   console.log(`API server running at http://localhost:${PORT}`);

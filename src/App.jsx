@@ -31,6 +31,13 @@ function App() {
 		setIsLoading(true);
 		setError("");
 
+		// Identifies the bubble the stream writes into, so each chunk updates
+		// that one rather than appending a new bubble per chunk
+		const translationId = crypto.randomUUID();
+
+		// A message the server chose to send; preferred over the generic one
+		let serverMessage = null;
+
 		try {
 			// Send fetch request to /api/translate
 			const response = await fetch("/api/translate", {
@@ -39,31 +46,79 @@ function App() {
 				body: JSON.stringify({ text: textToTranslate, language }),
 			});
 
-			const data = await response.json();
-
+			// A failure before the stream opens still arrives as plain JSON
 			if (!response.ok) {
+				const data = await response.json();
+				serverMessage = data.message;
 				throw new Error(data.message);
 			}
 
-			// Append, so earlier exchanges stay above the new one
-			setMessages((previous) => [
-				...previous,
-				{ id: crypto.randomUUID(), role: "translation", text: data.translation },
-			]);
+			const reader = response.body.getReader();
+			const decoder = new TextDecoder();
+			let buffer = "";
+			let streamed = "";
+
+			let chunk = await reader.read();
+
+			while (!chunk.done) {
+				buffer += decoder.decode(chunk.value, { stream: true });
+
+				// A chunk can split a line in half, so hold the tail back until
+				// the newline that completes it arrives
+				const lines = buffer.split("\n");
+				buffer = lines.pop() ?? "";
+
+				for (const line of lines) {
+					if (!line.trim()) continue;
+
+					const payload = JSON.parse(line);
+
+					if (payload.error) {
+						serverMessage = payload.error;
+						throw new Error(payload.error);
+					}
+
+					const isFirstChunk = streamed === "";
+					streamed += payload.delta;
+
+					if (isFirstChunk) {
+						// The bubble replaces the waiting dots
+						setIsLoading(false);
+						setMessages((previous) => [
+							...previous,
+							{ id: translationId, role: "translation", text: streamed },
+						]);
+					} else {
+						setMessages((previous) =>
+							previous.map((message) =>
+								message.id === translationId
+									? { ...message, text: streamed }
+									: message
+							)
+						);
+					}
+				}
+
+				chunk = await reader.read();
+			}
 		} catch (err) {
 			// Log the error for debugging
 			console.error(err);
 
-			// Take the unanswered bubble back out and hand the text back, so
-			// retrying is one keystroke rather than retyping
+			// Take the unanswered bubble and any half-written translation back
+			// out, and hand the text back, so retrying is one keystroke
 			setMessages((previous) =>
-				previous.filter((message) => message.id !== userMessage.id)
+				previous.filter(
+					(message) =>
+						message.id !== userMessage.id && message.id !== translationId
+				)
 			);
 			setText(textToTranslate);
 
 			// Display friendly error message
 			setError(
-				"Sorry, I can't reach the translator right now. Please try again in a bit."
+				serverMessage ??
+					"Sorry, I can't reach the translator right now. Please try again in a bit."
 			);
 		} finally {
 			setIsLoading(false);
