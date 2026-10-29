@@ -63,8 +63,9 @@ two-screen flow with a chat interface; 8 is independent of it.
    line. While waiting, a bubble of animated dots stands in for the old
    "Translating..." button label.
 7. ~~**Flag-only language buttons**~~ — **done.** Three flag buttons along the
-   bottom; the selected one carries a navy border. The radio list, both field
-   labels and the Start Over button are gone, as the mockup shows.
+   bottom; the selected one carries a navy border. The radio list and both
+   field labels are gone, as the mockup shows. The Start Over button went too,
+   then came back as a restart icon at the right of the same row.
 8. **Stream the translation in** as it is generated, rather than waiting for the
    whole completion. Needs `stream: true` on the request, the chunks relayed to
    the browser (server-sent events or a streaming response body), and the text
@@ -82,8 +83,11 @@ two-screen flow with a chat interface; 8 is independent of it.
 - Screen 2 of the main-requirement design (the separate "Original text / Your
   translation" view) no longer exists — stretch goal 1 replaced it by design.
   It is recoverable from commit `6fe2573` if the two-screen flow is ever needed.
-- There is no longer any way to clear the conversation: goal 7 removed the
-  Start Over button because the chat mockup has no such control. Reloading the
-  page is the only reset. Worth revisiting if the history grows awkward.
+- A restart icon sits at the right of the flag row, which the chat mockup does
+  not have. Goal 7 removed the Start Over button, leaving no way to clear the
+  conversation short of reloading, so the control was added back in the
+  lightest form that fits the row. It is disabled until there is something to
+  clear, and it keeps the chosen language, which is a preference rather than
+  part of the conversation.
 - The message field is a textarea styled to look like the mockup's single-line
   input, so multi-line text still works where a plain input would have lost it.

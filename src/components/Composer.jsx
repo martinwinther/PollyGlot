@@ -10,6 +10,8 @@ function Composer({
 	onTextChange,
 	onLanguageChange,
 	onSubmit,
+	onStartOver,
+	canStartOver,
 }) {
 	const inputRef = useRef(null);
 
@@ -56,22 +58,42 @@ function Composer({
 				</button>
 			</div>
 
-			<div className="language-picker" role="group" aria-label="Select language">
-				{LANGUAGES.map(({ name, flag }) => (
-					<button
-						key={name}
-						type="button"
-						className={`flag-button${
-							language === name ? " flag-button--selected" : ""
-						}`}
-						aria-pressed={language === name}
-						aria-label={name}
-						title={name}
-						onClick={() => onLanguageChange(name)}
-					>
-						<img src={flag} alt="" />
-					</button>
-				))}
+			<div className="composer-footer">
+				<div
+					className="language-picker"
+					role="group"
+					aria-label="Select language"
+				>
+					{LANGUAGES.map(({ name, flag }) => (
+						<button
+							key={name}
+							type="button"
+							className={`flag-button${
+								language === name ? " flag-button--selected" : ""
+							}`}
+							aria-pressed={language === name}
+							aria-label={name}
+							title={name}
+							onClick={() => onLanguageChange(name)}
+						>
+							<img src={flag} alt="" />
+						</button>
+					))}
+				</div>
+
+				<button
+					type="button"
+					className="restart-button"
+					onClick={onStartOver}
+					disabled={!canStartOver}
+					aria-label="Start over"
+					title="Start over"
+				>
+					<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+						<path d="M20 12a8 8 0 1 1-2.3-5.6" />
+						<path d="M20 3.5V8h-4.5" />
+					</svg>
+				</button>
 			</div>
 		</form>
 	);

@@ -75,11 +75,65 @@
 	cursor: not-allowed;
 }
 
+/* Flags stay centred in the row; the restart button is pinned to the right
+   so it cannot pull them off centre */
+.composer-footer {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 14px;
+}
+
 .language-picker {
 	display: flex;
 	justify-content: center;
 	gap: 18px;
-	margin-top: 14px;
+}
+
+.restart-button {
+	position: absolute;
+	right: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	color: var(--blue);
+	cursor: pointer;
+	transition: color 0.2s, opacity 0.2s, transform 0.3s;
+}
+
+.restart-button svg {
+	width: 22px;
+	height: 22px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.restart-button:hover:not(:disabled) {
+	transform: rotate(-45deg);
+}
+
+.restart-button:disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.restart-button {
+		transition: color 0.2s, opacity 0.2s;
+	}
+
+	.restart-button:hover:not(:disabled) {
+		transform: none;
+	}
 }
 
 .flag-button {

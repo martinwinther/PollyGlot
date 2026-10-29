@@ -70,6 +70,17 @@ function App() {
 		}
 	}
 
+	function handleStartOver() {
+		// The chosen language is a preference, not part of the conversation,
+		// so it survives a restart
+		setText("");
+		setMessages([INTRO_MESSAGE]);
+		setError("");
+	}
+
+	// The intro bubble is always there; anything past it is a real exchange
+	const canStartOver = messages.length > 1;
+
 	return (
 		<div className="app">
 			<Header />
@@ -84,6 +95,8 @@ function App() {
 						onTextChange={setText}
 						onLanguageChange={setLanguage}
 						onSubmit={handleTranslate}
+						onStartOver={handleStartOver}
+						canStartOver={canStartOver}
 					/>
 				</div>
 			</main>
