@@ -1,7 +1,7 @@
 # SubText
 
 **Subtitles for anything you say.** Type a line, pick a language, and it comes
-back translated — one cue at a time, in a conversation you can scroll.
+back translated, in a conversation you can scroll.
 
 React + Vite on the front, Express on the back, with an OpenAI-compatible
 provider doing the translating into French, Spanish or Japanese.
