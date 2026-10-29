@@ -54,14 +54,17 @@ two-screen flow with a chat interface; 8 is independent of it.
    there is no send button until goal 6.
 3. ~~**User message bubble**~~ — **done.** Green, holding the original text.
 4. ~~**Translation bubble**~~ — **done.** Dark navy, holding the reply.
-5. **Persistent history** — exchanges stack up instead of one at a time. Partly
-   groundwork-complete: state is already a `messages` array with stable keys and
-   the auto-scroll is in place, so this is now a matter of appending to that
-   array rather than replacing it, plus deciding how far back to keep.
-6. **Inline send field** with the send arrow inside the input, replacing the
-   full-width Translate button.
-7. **Flag-only language buttons** along the bottom, replacing the labelled radio
-   list and the Start Over button.
+5. ~~**Persistent history**~~ — **done.** Exchanges append and the column
+   scrolls through them. The sent text appears immediately as its own bubble;
+   if the request fails that bubble is removed again and the text is handed
+   back to the field, so a retry is one keystroke.
+6. ~~**Inline send field**~~ — **done.** A green send arrow sits inside the
+   field, which grows with its content. Enter sends, Shift+Enter makes a new
+   line. While waiting, a bubble of animated dots stands in for the old
+   "Translating..." button label.
+7. ~~**Flag-only language buttons**~~ — **done.** Three flag buttons along the
+   bottom; the selected one carries a navy border. The radio list, both field
+   labels and the Start Over button are gone, as the mockup shows.
 8. **Stream the translation in** as it is generated, rather than waiting for the
    whole completion. Needs `stream: true` on the request, the chunks relayed to
    the browser (server-sent events or a streaming response body), and the text
@@ -79,3 +82,8 @@ two-screen flow with a chat interface; 8 is independent of it.
 - Screen 2 of the main-requirement design (the separate "Original text / Your
   translation" view) no longer exists — stretch goal 1 replaced it by design.
   It is recoverable from commit `6fe2573` if the two-screen flow is ever needed.
+- There is no longer any way to clear the conversation: goal 7 removed the
+  Start Over button because the chat mockup has no such control. Reloading the
+  page is the only reset. Worth revisiting if the history grows awkward.
+- The message field is a textarea styled to look like the mockup's single-line
+  input, so multi-line text still works where a plain input would have lost it.

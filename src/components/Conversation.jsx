@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./Conversation.css";
 
-function Conversation({ messages }) {
+function Conversation({ messages, isLoading }) {
 	const columnRef = useRef(null);
 
 	// Keep the newest bubble in view as the column fills up
@@ -10,7 +10,7 @@ function Conversation({ messages }) {
 		if (column) {
 			column.scrollTop = column.scrollHeight;
 		}
-	}, [messages]);
+	}, [messages, isLoading]);
 
 	return (
 		<div className="conversation" ref={columnRef} role="log" aria-live="polite">
@@ -19,6 +19,14 @@ function Conversation({ messages }) {
 					{text}
 				</p>
 			))}
+			{isLoading && (
+				<p className="bubble bubble--translation bubble--typing">
+					<span className="sr-only">Translating</span>
+					<span className="dot" aria-hidden="true" />
+					<span className="dot" aria-hidden="true" />
+					<span className="dot" aria-hidden="true" />
+				</p>
+			)}
 		</div>
 	);
 }

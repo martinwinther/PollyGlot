@@ -10,3 +10,11 @@
 .app-body {
 	padding: 16px;
 }
+
+.translator-card {
+	display: flex;
+	flex-direction: column;
+	padding: 16px;
+	border: 2px solid var(--blue);
+	border-radius: 8px;
+}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import Conversation from "./components/Conversation";
-import TranslationForm from "./components/TranslationForm";
+import Composer from "./components/Composer";
 import { DEFAULT_LANGUAGE, INTRO_MESSAGE } from "./constants";
 import "./App.css";
 
@@ -20,6 +20,14 @@ function App() {
 		const textToTranslate = text.trim();
 		if (!textToTranslate) return;
 
+		// Show what was sent straight away; the reply lands underneath it
+		const userMessage = {
+			id: crypto.randomUUID(),
+			role: "user",
+			text: textToTranslate,
+		};
+		setMessages((previous) => [...previous, userMessage]);
+		setText("");
 		setIsLoading(true);
 		setError("");
 
@@ -40,15 +48,18 @@ function App() {
 			// Append, so earlier exchanges stay above the new one
 			setMessages((previous) => [
 				...previous,
-				{ id: crypto.randomUUID(), role: "user", text: textToTranslate },
 				{ id: crypto.randomUUID(), role: "translation", text: data.translation },
 			]);
-
-			// The text now lives in the conversation, so empty the box for the next one
-			setText("");
 		} catch (err) {
 			// Log the error for debugging
 			console.error(err);
+
+			// Take the unanswered bubble back out and hand the text back, so
+			// retrying is one keystroke rather than retyping
+			setMessages((previous) =>
+				previous.filter((message) => message.id !== userMessage.id)
+			);
+			setText(textToTranslate);
 
 			// Display friendly error message
 			setError(
@@ -59,23 +70,13 @@ function App() {
 		}
 	}
 
-	function handleStartOver() {
-		setText("");
-		setLanguage(DEFAULT_LANGUAGE);
-		setMessages([INTRO_MESSAGE]);
-		setError("");
-	}
-
-	// The intro bubble is always present, so anything beyond it is a translation
-	const hasTranslation = messages.length > 1;
-
 	return (
 		<div className="app">
 			<Header />
 			<main className="app-body">
 				<div className="translator-card">
-					<Conversation messages={messages} />
-					<TranslationForm
+					<Conversation messages={messages} isLoading={isLoading} />
+					<Composer
 						text={text}
 						language={language}
 						isLoading={isLoading}
@@ -84,15 +85,6 @@ function App() {
 						onLanguageChange={setLanguage}
 						onSubmit={handleTranslate}
 					/>
-					{hasTranslation && (
-						<button
-							type="button"
-							className="secondary-button"
-							onClick={handleStartOver}
-						>
-							Start Over
-						</button>
-					)}
 				</div>
 			</main>
 		</div>

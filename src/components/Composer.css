@@ -1,0 +1,115 @@
+.composer {
+	display: flex;
+	flex-direction: column;
+}
+
+.composer-field {
+	display: flex;
+	align-items: flex-end;
+	gap: 8px;
+	padding: 8px 10px;
+	border: 1px solid #c5d8ea;
+	border-radius: 6px;
+	background-color: var(--grey-field);
+}
+
+.composer-field:focus-within {
+	outline: 2px solid var(--blue);
+	outline-offset: 1px;
+}
+
+.composer-input {
+	flex: 1;
+	max-height: 120px;
+	padding: 4px 0;
+	border: none;
+	background: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--navy);
+	resize: none;
+	overflow-y: auto;
+}
+
+.composer-input:focus {
+	outline: none;
+}
+
+.composer-input::placeholder {
+	color: #6b7280;
+	font-weight: 600;
+}
+
+.send-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	color: var(--green-send);
+	cursor: pointer;
+	transition: transform 0.15s, opacity 0.2s;
+}
+
+.send-button svg {
+	width: 26px;
+	height: 26px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 2;
+	stroke-linejoin: round;
+}
+
+.send-button:hover:not(:disabled) {
+	transform: translateX(2px);
+}
+
+.send-button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.language-picker {
+	display: flex;
+	justify-content: center;
+	gap: 18px;
+	margin-top: 14px;
+}
+
+.flag-button {
+	display: flex;
+	padding: 2px;
+	border: 2px solid #d7dbe3;
+	border-radius: 3px;
+	background-color: #fff;
+	cursor: pointer;
+	transition: border-color 0.2s, transform 0.15s;
+}
+
+.flag-button img {
+	display: block;
+	width: 42px;
+	height: auto;
+}
+
+.flag-button:hover {
+	transform: translateY(-1px);
+}
+
+.flag-button--selected {
+	border-color: var(--navy);
+}
+
+.error-message {
+	margin: 0 0 12px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #b3261e;
+	text-align: center;
+}
