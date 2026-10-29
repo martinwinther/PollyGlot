@@ -1,19 +1,64 @@
-:root {
-	--navy: #0e1e3c;
-	--blue: #035a9d;
-	--blue-dark: #02426f;
-	--green: #35d461;
-	--green-bubble: #8ed17f;
-	--blue-bubble: #2e5e9e;
-	--blue-intro: #3e6da8;
-	--green-send: #4cb050;
-	--grey-field: #eff0f4;
-	--page-bg: #f4f6f9;
+/* ──────────────────────────────────────────────────────────────
+   SubText design tokens
 
-	font-family: Poppins, system-ui, Avenir, Helvetica, Arial, sans-serif;
+   The room is dark, the screen is lit, and exactly one colour is
+   saturated: projector amber. Amber marks action and result, never
+   decoration — if everything glows, nothing reads.
+   ────────────────────────────────────────────────────────────── */
+
+:root {
+	/* Surfaces, darkest to lightest. Ink is the room; the rest is screen. */
+	--ink: #0a0b0d;
+	--surface: #13151a;
+	--surface-sunken: #171a21;
+	--surface-raised: #1b1f27;
+
+	/* Hairlines do the framing work that borders used to do loudly */
+	--line: rgba(255, 255, 255, 0.08);
+	--line-strong: rgba(255, 255, 255, 0.16);
+
+	/* Projector amber */
+	--amber: #f0b429;
+	--amber-bright: #ffc94a;
+	--amber-wash: rgba(240, 180, 41, 0.1);
+	--amber-edge: rgba(240, 180, 41, 0.3);
+
+	/* Warm whites: the colour of light through film, not LED white */
+	--text: #f2efe8;
+	--text-dim: #9ca3b0;
+	--text-faint: #8a919f;
+	--danger: #ff9184;
+
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 20px;
+	--space-6: 24px;
+
+	--radius-chip: 999px;
+	--radius-bubble: 14px;
+	--radius-field: 14px;
+	--radius-card: 20px;
+
+	--shadow-card: 0 32px 80px -32px rgba(0, 0, 0, 0.9);
+	--shadow-lift: 0 2px 12px -4px rgba(0, 0, 0, 0.6);
+
+	/* One easing curve everywhere: quick out, soft landing */
+	--ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+	/* Inter carries the UI; the CJK faces behind it keep Japanese
+	   translations from falling back to a mismatched system font */
+	--font-ui: Inter, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", system-ui,
+		-apple-system, Helvetica, Arial, sans-serif;
+	/* Condensed caps for the wordmark and metadata labels — poster type */
+	--font-display: "Bebas Neue", var(--font-ui);
+
+	font-family: var(--font-ui);
 	line-height: 1.5;
 	font-weight: 400;
-	color: var(--navy);
+	color: var(--text);
+	color-scheme: dark;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -26,15 +71,41 @@
 }
 
 body {
+	position: relative;
 	margin: 0;
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 24px 16px;
-	background-color: var(--page-bg);
+	padding: var(--space-6) var(--space-4);
+	background-color: var(--ink);
+	/* The projector beam, falling from above onto the card */
+	background-image: radial-gradient(
+		70% 55% at 50% -10%,
+		rgba(240, 180, 41, 0.12),
+		transparent 70%
+	);
+}
+
+/* Film grain over the whole room. Fixed, so it sits in the air rather
+   than scrolling with the content. */
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	opacity: 0.045;
+	mix-blend-mode: overlay;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 h1 {
 	margin: 0;
+}
+
+/* One focus treatment for every control on the screen */
+:focus-visible {
+	outline: 2px solid var(--amber);
+	outline-offset: 2px;
 }

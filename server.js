@@ -13,7 +13,7 @@ const openai = new OpenAI({
   baseURL: process.env.AI_URL,
 });
 
-const SYSTEM_PROMPT = `You are PollyGlot, a translation engine.
+const SYSTEM_PROMPT = `You are SubText, a translation engine.
 
 You receive a target language and a piece of text.
 Translate the text into the target language.

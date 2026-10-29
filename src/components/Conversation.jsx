@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import "./Conversation.css";
 
-function Conversation({ messages, isLoading }) {
+function Conversation({ messages, isLoading, language }) {
 	const columnRef = useRef(null);
 
-	// Keep the newest bubble in view as the column fills up
+	// Keep the newest cue in view as the column fills up
 	useEffect(() => {
 		const column = columnRef.current;
 		if (column) {
@@ -13,19 +13,26 @@ function Conversation({ messages, isLoading }) {
 	}, [messages, isLoading]);
 
 	return (
-		<div className="conversation" ref={columnRef} role="log" aria-live="polite">
-			{messages.map(({ id, role, text }) => (
-				<p key={id} className={`bubble bubble--${role}`}>
-					{text}
-				</p>
+		<div className="cues" ref={columnRef} role="log" aria-live="polite">
+			{messages.map((message) => (
+				<div key={message.id} className={`cue cue--${message.role}`}>
+					{message.role === "translation" && (
+						<span className="cue-label">{message.language}</span>
+					)}
+					<p className="cue-text">{message.text}</p>
+				</div>
 			))}
+
 			{isLoading && (
-				<p className="bubble bubble--translation bubble--typing">
-					<span className="sr-only">Translating</span>
-					<span className="dot" aria-hidden="true" />
-					<span className="dot" aria-hidden="true" />
-					<span className="dot" aria-hidden="true" />
-				</p>
+				<div className="cue cue--translation">
+					<span className="cue-label">{language}</span>
+					<p className="cue-text cue-text--typing">
+						<span className="sr-only">Translating</span>
+						<span className="dot" aria-hidden="true" />
+						<span className="dot" aria-hidden="true" />
+						<span className="dot" aria-hidden="true" />
+					</p>
+				</div>
 			)}
 		</div>
 	);

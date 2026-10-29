@@ -40,7 +40,7 @@ function Composer({
 					ref={inputRef}
 					rows={1}
 					className="composer-input"
-					placeholder="How are you?"
+					placeholder="Type a line…"
 					aria-label="Text to translate"
 					value={text}
 					onChange={(e) => onTextChange(e.target.value)}
@@ -53,30 +53,27 @@ function Composer({
 					aria-label="Translate"
 				>
 					<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-						<path d="M3 5l17.5 7L3 19l3.6-7L3 5z" />
+						<path d="M4 12h13M11.5 6l6 6-6 6" />
 					</svg>
 				</button>
 			</div>
 
+			{/* Subtitle track selector: the three flags stay centred, and the
+			    rewind is pinned right so it cannot pull them off centre */}
 			<div className="composer-footer">
-				<div
-					className="language-picker"
-					role="group"
-					aria-label="Select language"
-				>
-					{LANGUAGES.map(({ name, flag }) => (
+				<div className="track-picker" role="group" aria-label="Select language">
+					{LANGUAGES.map(({ name, code, flag }) => (
 						<button
 							key={name}
 							type="button"
-							className={`flag-button${
-								language === name ? " flag-button--selected" : ""
-							}`}
+							className={`track${language === name ? " track--selected" : ""}`}
 							aria-pressed={language === name}
 							aria-label={name}
 							title={name}
 							onClick={() => onLanguageChange(name)}
 						>
-							<img src={flag} alt="" />
+							<img className="track-flag" src={flag} alt="" />
+							<span className="track-code">{code}</span>
 						</button>
 					))}
 				</div>

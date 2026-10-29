@@ -82,11 +82,16 @@ function App() {
 					streamed += payload.delta;
 
 					if (isFirstChunk) {
-						// The bubble replaces the waiting dots
+						// The cue replaces the waiting dots
 						setIsLoading(false);
 						setMessages((previous) => [
 							...previous,
-							{ id: translationId, role: "translation", text: streamed },
+							{
+								id: translationId,
+								role: "translation",
+								language,
+								text: streamed,
+							},
 						]);
 					} else {
 						setMessages((previous) =>
@@ -133,15 +138,19 @@ function App() {
 		setError("");
 	}
 
-	// The intro bubble is always there; anything past it is a real exchange
+	// The intro cue is always there; anything past it is a real exchange
 	const canStartOver = messages.length > 1;
 
 	return (
 		<div className="app">
 			<Header />
 			<main className="app-body">
-				<div className="translator-card">
-					<Conversation messages={messages} isLoading={isLoading} />
+				<div className="stage">
+					<Conversation
+						messages={messages}
+						isLoading={isLoading}
+						language={language}
+					/>
 					<Composer
 						text={text}
 						language={language}

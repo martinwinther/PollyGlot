@@ -1,34 +1,36 @@
 .composer {
 	display: flex;
 	flex-direction: column;
+	gap: var(--space-4);
 }
 
 .composer-field {
 	display: flex;
 	align-items: flex-end;
-	gap: 8px;
-	padding: 8px 10px;
-	border: 1px solid #c5d8ea;
-	border-radius: 6px;
-	background-color: var(--grey-field);
+	gap: var(--space-2);
+	padding: 7px 7px 7px var(--space-4);
+	border: 1px solid var(--line);
+	border-radius: var(--radius-field);
+	background-color: var(--surface-raised);
+	transition: border-color 0.16s, box-shadow 0.16s;
 }
 
+/* Focus lights the field amber rather than drawing a system outline */
 .composer-field:focus-within {
-	outline: 2px solid var(--blue);
-	outline-offset: 1px;
+	border-color: var(--amber-edge);
+	box-shadow: 0 0 0 3px var(--amber-wash);
 }
 
 .composer-input {
 	flex: 1;
 	max-height: 120px;
-	padding: 4px 0;
+	padding: 6px 0;
 	border: none;
 	background: transparent;
 	font-family: inherit;
 	font-size: 14px;
-	font-weight: 600;
-	line-height: 1.4;
-	color: var(--navy);
+	line-height: 1.45;
+	color: var(--text);
 	resize: none;
 	overflow-y: auto;
 }
@@ -38,78 +40,132 @@
 }
 
 .composer-input::placeholder {
-	color: #6b7280;
-	font-weight: 600;
+	color: var(--text-faint);
 }
 
+/* The one solid amber element on the screen, like a play button */
 .send-button {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	display: grid;
+	place-items: center;
 	flex-shrink: 0;
-	width: 32px;
-	height: 32px;
+	width: 34px;
+	height: 34px;
 	padding: 0;
 	border: none;
-	background: transparent;
-	color: var(--green-send);
+	border-radius: var(--radius-chip);
+	background-color: var(--amber);
+	color: var(--ink);
 	cursor: pointer;
-	transition: transform 0.15s, opacity 0.2s;
+	transition: background-color 0.16s, transform 0.14s var(--ease);
 }
 
 .send-button svg {
-	width: 26px;
-	height: 26px;
+	width: 17px;
+	height: 17px;
 	fill: none;
 	stroke: currentColor;
-	stroke-width: 2;
+	stroke-width: 2.2;
+	stroke-linecap: round;
 	stroke-linejoin: round;
 }
 
 .send-button:hover:not(:disabled) {
-	transform: translateX(2px);
+	background-color: var(--amber-bright);
+}
+
+.send-button:active:not(:disabled) {
+	transform: scale(0.94);
 }
 
 .send-button:disabled {
-	opacity: 0.4;
+	background-color: rgba(255, 255, 255, 0.07);
+	color: var(--text-faint);
 	cursor: not-allowed;
 }
 
-/* Flags stay centred in the row; the restart button is pinned to the right
-   so it cannot pull them off centre */
 .composer-footer {
 	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-top: 14px;
 }
 
-.language-picker {
+.track-picker {
 	display: flex;
-	justify-content: center;
-	gap: 18px;
+	gap: var(--space-2);
+}
+
+/* Each language reads like a subtitle track in a player: flag, then code */
+.track {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	padding: 5px 11px 5px 7px;
+	border: 1px solid var(--line);
+	border-radius: var(--radius-chip);
+	background: transparent;
+	color: var(--text-faint);
+	cursor: pointer;
+	transition: border-color 0.16s, background-color 0.16s, color 0.16s;
+}
+
+.track-flag {
+	display: block;
+	width: 22px;
+	height: 15px;
+	border-radius: 3px;
+	/* A hairline keeps the white in the French and Japanese flags from
+	   bleeding into the dark chip behind it */
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+	opacity: 0.45;
+	transition: opacity 0.16s;
+}
+
+.track-code {
+	font-family: var(--font-display);
+	font-size: 14px;
+	line-height: 1;
+	letter-spacing: 0.1em;
+}
+
+.track:hover:not(.track--selected) {
+	border-color: var(--line-strong);
+	color: var(--text-dim);
+}
+
+.track:hover:not(.track--selected) .track-flag {
+	opacity: 0.8;
+}
+
+.track--selected {
+	border-color: var(--amber-edge);
+	background-color: var(--amber-wash);
+	color: var(--amber);
+}
+
+.track--selected .track-flag {
+	opacity: 1;
 }
 
 .restart-button {
 	position: absolute;
 	right: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 32px;
-	height: 32px;
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
 	padding: 0;
 	border: none;
+	border-radius: var(--radius-chip);
 	background: transparent;
-	color: var(--blue);
+	color: var(--text-faint);
 	cursor: pointer;
-	transition: color 0.2s, opacity 0.2s, transform 0.3s;
+	transition: color 0.16s, opacity 0.16s, transform 0.3s var(--ease);
 }
 
 .restart-button svg {
-	width: 22px;
-	height: 22px;
+	width: 18px;
+	height: 18px;
 	fill: none;
 	stroke: currentColor;
 	stroke-width: 2;
@@ -118,52 +174,29 @@
 }
 
 .restart-button:hover:not(:disabled) {
+	color: var(--amber);
 	transform: rotate(-45deg);
 }
 
 .restart-button:disabled {
-	opacity: 0.3;
+	opacity: 0.35;
 	cursor: not-allowed;
+}
+
+.error-message {
+	margin: 0;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--danger);
+	text-align: center;
 }
 
 @media (prefers-reduced-motion: reduce) {
 	.restart-button {
-		transition: color 0.2s, opacity 0.2s;
+		transition: color 0.16s, opacity 0.16s;
 	}
 
 	.restart-button:hover:not(:disabled) {
 		transform: none;
 	}
-}
-
-.flag-button {
-	display: flex;
-	padding: 2px;
-	border: 2px solid #d7dbe3;
-	border-radius: 3px;
-	background-color: #fff;
-	cursor: pointer;
-	transition: border-color 0.2s, transform 0.15s;
-}
-
-.flag-button img {
-	display: block;
-	width: 42px;
-	height: auto;
-}
-
-.flag-button:hover {
-	transform: translateY(-1px);
-}
-
-.flag-button--selected {
-	border-color: var(--navy);
-}
-
-.error-message {
-	margin: 0 0 12px;
-	font-size: 13px;
-	font-weight: 600;
-	color: #b3261e;
-	text-align: center;
 }
